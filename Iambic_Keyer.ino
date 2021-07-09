@@ -8,8 +8,8 @@
 #include <Adafruit_RGBLCDShield.h>
 Adafruit_RGBLCDShield lcd = Adafruit_RGBLCDShield();
 int speed = 60;
-unsigned long t0,t1,t2;
-boolean flag = false;
+unsigned long t0,t1,t2,t3=0;
+boolean flag, flag2 = false;
 char* lookupString = ".EISH54V.3UF....2ARL.....WP..J.1TNDB6.X..KC..Y..MGZ7.Q..O.8..90.";
 byte currentDecoderIndex = 0;
 byte currentDashJump = 64;
@@ -27,6 +27,7 @@ void setup()
   lcd.setCursor(0,1);
   pinMode(P_DOT,INPUT_PULLUP);
   pinMode(P_DASH,INPUT_PULLUP );
+  
 }
 
 // Main routine
@@ -42,6 +43,7 @@ void loop()
     delay(speed);
     t2 = millis();
     flag = true;
+    flag2 = false;
   }
   if ((lcd.readButtons() & BUTTON_RIGHT) || (!digitalRead(P_DASH))) // If the dash lever is pressed...      
   {
@@ -54,6 +56,7 @@ void loop()
     delay(speed);
     t2 = millis();
     flag = true;
+    flag2 = false;
   }
   if ((millis()-t2 > speed) & flag)
   { 
@@ -71,7 +74,21 @@ void loop()
     flag = false;
     t1 = millis()-t0;
     delay (3*speed-t1);
-  }       
+    t3 = millis();
+    flag2=true;
+  }
+  if (((millis()-t3) > (15*speed)) & flag2)
+  {
+    lcd.print(" ");
+    curPos++;
+    if (curPos == 16)
+    {  
+      lcd.setCursor(0,1);
+      curPos = 0;      
+    }
+   flag2 = false;   
+   t3 = 0;      
+  }
 }
 // Key the transmitter and sound a beep
 void keyAndBeep(int speed)
