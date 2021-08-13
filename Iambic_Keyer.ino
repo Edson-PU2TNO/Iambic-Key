@@ -7,10 +7,10 @@
 
 #include <Adafruit_RGBLCDShield.h>
 Adafruit_RGBLCDShield lcd = Adafruit_RGBLCDShield();
-int speed = 60;
+int speed = 54;
 unsigned long t0,t1,t2,t3=0;
 boolean flag, flag2 = false;
-char* lookupString = ".EISH54V.3UF....2ARL.....WP..J.1TNDB6.X..KC..Y..MGZ7.Q..O.8..90.";
+char* lookupString = ".EISH54V.3UF....2ARL...+.WP..J.1TNDB6=X/.KC..Y..MGZ7.Q..O.8..90.";
 byte currentDecoderIndex = 0;
 byte currentDashJump = 64;
 char currentAssumedChar='\0';
@@ -33,35 +33,30 @@ void setup()
 // Main routine
 void loop()
 {
+
   if ((lcd.readButtons() & BUTTON_LEFT) || (!digitalRead(P_DOT))) // If the dot lever is presssed..     
   {
     keyAndBeep(speed);            // ... send a dot at the given speed
-    //t0 = millis();
     currentAssumedChar = lookup('.');
-    //t1 = millis()-t0;
-    //delay(speed-t1);                //     and wait before sending next
     delay(speed);
-    t2 = millis();
+    t2 = millis(); 
     flag = true;
     flag2 = false;
   }
+  
+
   if ((lcd.readButtons() & BUTTON_RIGHT) || (!digitalRead(P_DASH))) // If the dash lever is pressed...      
   {
     keyAndBeep(speed*3);         // ... send a dash at the given speed
-    //t0 = millis();
-    //lcd.print("_");
     currentAssumedChar = lookup('-');
-    //t1 = millis()-t0;
-    //delay(speed-t1);                //     and wait before sending next
     delay(speed);
     t2 = millis();
     flag = true;
     flag2 = false;
   }
+
   if ((millis()-t2 > speed) & flag)
   { 
-    //lcd.print(" ");
-   // lcd.clear();
     t0 = millis();
     lcd.print(currentAssumedChar);
     curPos++;
@@ -73,11 +68,13 @@ void loop()
     lookup('\0');
     flag = false;
     t1 = millis()-t0;
-    delay (3*speed-t1);
+    delay (2*speed-t1);
     t3 = millis();
     flag2=true;
   }
-  if (((millis()-t3) > (15*speed)) & flag2)
+
+
+  if (((millis()-t3) > (17*speed)) & flag2)
   {
     lcd.print(" ");
     curPos++;
@@ -93,7 +90,7 @@ void loop()
 // Key the transmitter and sound a beep
 void keyAndBeep(int speed)
 {
-  tone (8,700,speed);
+  tone (8,600,speed);
   delay (speed);
 }
 
