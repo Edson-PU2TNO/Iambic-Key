@@ -10,9 +10,9 @@ Adafruit_RGBLCDShield lcd = Adafruit_RGBLCDShield();
 int speed = 54;
 unsigned long t0,t1,t2,t3=0;
 boolean flag, flag2 = false;
-char* lookupString = ".EISH54V.3UF....2ARL...+.WP..J.1TNDB6=X/.KC..Y..MGZ7.Q..O.8..90.";
+char* lookupString = ".EISH5..4..V...3..UF........?_2..ARL.......+.....WP....@.J...1'.TNDB6.-=..X/.....KC....;!Y......MGZ7....,Q......O.8:.....9..0..";
 byte currentDecoderIndex = 0;
-byte currentDashJump = 64;
+byte currentDashJump = 128;
 char currentAssumedChar='\0';
 byte curPos = 0;
 
@@ -108,7 +108,7 @@ char lookup(char currentMark)
     else if (currentMark == '\0')
     {
         currentDecoderIndex = 0;
-        currentDashJump = 64;
+        currentDashJump = 128;
         return '\0';
     }
     return lookupString[currentDecoderIndex];
