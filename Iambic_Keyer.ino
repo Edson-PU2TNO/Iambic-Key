@@ -10,16 +10,36 @@ Adafruit_RGBLCDShield lcd = Adafruit_RGBLCDShield();
 int speed = 54;
 unsigned long t0,t1,t2,t3=0;
 boolean flag, flag2 = false;
-char* lookupString = ".EISH5..4..V...3..UF........?_2..ARL.......+.*...WP....@.J...1'.TNDB6.-=..X/.....KC....;!Y......MGZ7....,Q......O.8:.....9..0..";
+char* lookupString = ".EISH5..4..V...3..UF........?_2..ARL.......+.*...WP....@.J...1'.TNDB6.-=.%X/.....KC....;!Y%.....MGZ7....,Q......O.8:.....9..0..";
 byte currentDecoderIndex = 0;
 byte currentDashJump = 128;
 char currentAssumedChar='\0';
 byte curPos = 0;
 
+byte icons[6][8] = { { 0x04,0x0e,0x15,0x04,0x04,0x04,0x04 }, // UP
+                     { 0x04,0x04,0x04,0x04,0x15,0x0e,0x04 }, // DOWN
+                     { 0x10,0x18,0x18,0x00,0x07,0x02,0x02 }, // BT
+                     { 0x10,0x18,0x18,0x00,0x05,0x06,0x05 }, // BK
+                     { 0x14,0x18,0x14,0x00,0x19,0x15,0x13 }, // KN
+                     { 0x18,0x10,0x18,0x08,0x1d,0x06,0x05 } // SK
+};
+
+//! Enum of backlight colors.
+enum Icons {UP=0x00, DOWN, BT, BK, KN, SK};
+
 // Initializing the Arduino
 void setup()
 {
   lcd.begin(16,2);
+
+// Creating LCD chars
+  lcd.createChar(UP, icons[UP]);
+  lcd.createChar(DOWN, icons[DOWN]);  
+  lcd.createChar(BT, icons[BT]); 
+  lcd.createChar(BK, icons[BK]); 
+  lcd.createChar(KN, icons[KN]); 
+  lcd.createChar(SK, icons[SK]);
+
   lcd.cursor();
   lcd.clear();
   lcd.print (1200/speed);
@@ -27,7 +47,8 @@ void setup()
   lcd.setCursor(0,1);
   pinMode(P_DOT,INPUT_PULLUP);
   pinMode(P_DASH,INPUT_PULLUP );
-  
+  Serial.begin(9600);
+
 }
 
 // Main routine
@@ -111,5 +132,8 @@ char lookup(char currentMark)
         currentDashJump = 128;
         return '\0';
     }
+    Serial.println(currentDecoderIndex);
+    if (currentDecoderIndex == 73) return 3; // Display BK prosign
+    else if (currentDecoderIndex == 90) return 4; // Display KN prosign
     return lookupString[currentDecoderIndex];
 }
