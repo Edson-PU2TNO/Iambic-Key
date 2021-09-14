@@ -7,7 +7,8 @@
 
 #include <Adafruit_RGBLCDShield.h>
 Adafruit_RGBLCDShield lcd = Adafruit_RGBLCDShield();
-int speed = 54;
+int speed = 60; //20 WPM
+//    int speed = 120; // 10 WPM
 unsigned long t0,t1,t2,t3=0;
 boolean flag, flag2 = false;
 char* lookupString = ".EISH5..4..V...3..UF........?_2..ARL.......+.*...WP....@.J...1'.TNDB6.-=.%X/.....KC....;!Y%.....MGZ7....,Q......O.8:.....9..0..";
@@ -95,7 +96,7 @@ void loop()
   }
 
 
-  if (((millis()-t3) > (17*speed)) & flag2)
+  if (((millis()-t3) > (13*speed)) & flag2)
   {
     lcd.print(" ");
     curPos++;
@@ -135,5 +136,6 @@ char lookup(char currentMark)
     Serial.println(currentDecoderIndex);
     if (currentDecoderIndex == 73) return 3; // Display BK prosign
     else if (currentDecoderIndex == 90) return 4; // Display KN prosign
+    else if (currentDecoderIndex == 14) return 5; // Display SK prosign    
     return lookupString[currentDecoderIndex];
 }
