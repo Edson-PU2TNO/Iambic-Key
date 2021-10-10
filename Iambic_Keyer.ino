@@ -112,7 +112,7 @@ void loop()
 // Key the transmitter and sound a beep
 void keyAndBeep(int speed)
 {
-  tone (8,600,speed);
+  tone (8,580,speed);
   delay (speed);
 }
 
